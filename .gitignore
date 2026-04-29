@@ -1,0 +1,39 @@
+# 大文件 - 不上传 GitHub
+**/原材料/
+**/_archive/
+**/.git_backup/
+**/_原材料暂存/
+**/原材料暂存/
+
+# PDF 等大文件
+*.pdf
+*.PDF
+*.zip
+*.rar
+*.7z
+*.epub
+*.mobi
+*.mp4
+*.mkv
+
+# Office 临时
+~$*
+*.~docx
+*.~xlsx
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+node_modules/
