@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(pdfinfo \"张宇30讲_第15讲_例题（上）.pdf\")",
+      "Bash(pdfinfo \"张宇30讲_第15讲_例题（下）.pdf\")"
+    ]
+  }
+}
