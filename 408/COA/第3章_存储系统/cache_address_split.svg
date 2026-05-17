@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" font-family="-apple-system, 'Microsoft YaHei', sans-serif">
+  <style>
+    .title { font-size: 16px; font-weight: bold; fill: #111; }
+    .lbl { font-size: 13px; fill: #222; }
+    .small { font-size: 11px; fill: #555; }
+    .tag { fill: #fee2e2; stroke: #dc2626; }
+    .idx { fill: #fef6e4; stroke: #d97706; }
+    .off { fill: #dcfce7; stroke: #16a34a; }
+    .none { fill: #f1f5f9; stroke: #94a3b8; stroke-dasharray: 4 3; }
+  </style>
+
+  <text x="400" y="26" text-anchor="middle" class="title">CPU 物理地址(m 位)的三段切分 vs 三种映射</text>
+  <text x="400" y="46" text-anchor="middle" class="small">同一个公式 t = m − s − b,只是 s(组索引位)的取值不同</text>
+
+  <!-- Direct mapped -->
+  <text x="40" y="100" class="lbl" font-weight="bold">直接映射(E = 1)</text>
+  <text x="40" y="118" class="small">S = 总行数 = 2^c,s = c = log₂(行数)</text>
+
+  <rect x="220" y="90" width="280" height="40" class="tag"/>
+  <text x="360" y="115" text-anchor="middle" class="lbl">Tag (t = m-c-b 位)</text>
+
+  <rect x="500" y="90" width="160" height="40" class="idx"/>
+  <text x="580" y="115" text-anchor="middle" class="lbl">行号 (c 位)</text>
+
+  <rect x="660" y="90" width="100" height="40" class="off"/>
+  <text x="710" y="115" text-anchor="middle" class="lbl">偏移 (b 位)</text>
+
+  <text x="220" y="148" class="small">⚙️ 比较器: 1 个</text>
+  <text x="500" y="148" class="small">⚙️ 行号定位唯一行</text>
+
+  <!-- Set associative -->
+  <text x="40" y="210" class="lbl" font-weight="bold">组相联(1 &lt; E &lt; C/B)</text>
+  <text x="40" y="228" class="small">S = 总行数 / E,s = log₂(S)</text>
+
+  <rect x="220" y="200" width="280" height="40" class="tag"/>
+  <text x="360" y="225" text-anchor="middle" class="lbl">Tag (t = m-s-b 位)</text>
+
+  <rect x="500" y="200" width="160" height="40" class="idx"/>
+  <text x="580" y="225" text-anchor="middle" class="lbl">组号 (s 位)</text>
+
+  <rect x="660" y="200" width="100" height="40" class="off"/>
+  <text x="710" y="225" text-anchor="middle" class="lbl">偏移 (b 位)</text>
+
+  <text x="220" y="258" class="small">⚙️ 比较器: E 个(组内并行比较)</text>
+
+  <!-- Fully associative -->
+  <text x="40" y="320" class="lbl" font-weight="bold">全相联(E = C/B, S = 1)</text>
+  <text x="40" y="338" class="small">只有 1 个组,s = 0 → 没有组索引字段!</text>
+
+  <rect x="220" y="310" width="440" height="40" class="tag"/>
+  <text x="440" y="335" text-anchor="middle" class="lbl">Tag (t = m-b 位)</text>
+
+  <rect x="500" y="310" width="160" height="40" class="none"/>
+  <text x="580" y="335" text-anchor="middle" class="small">(无组号字段)</text>
+
+  <rect x="660" y="310" width="100" height="40" class="off"/>
+  <text x="710" y="335" text-anchor="middle" class="lbl">偏移 (b 位)</text>
+
+  <text x="220" y="368" class="small">⚙️ 比较器: N = 总行数(全部并行比较 → 昂贵的相联存储器)</text>
+
+  <!-- Bottom note -->
+  <rect x="40" y="395" width="720" height="50" fill="#fff7ed" stroke="#fb923c" stroke-width="1" rx="4"/>
+  <text x="56" y="416" class="small">⚠️ 组索引必须用中间位(不能用高位): 连续主存块高位相同,</text>
+  <text x="56" y="434" class="small">     用高位会让连续访问全部映射到同一组,严重冲突。CSAPP 图 6-31。</text>
+</svg>

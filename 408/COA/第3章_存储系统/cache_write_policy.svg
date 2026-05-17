@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" font-family="-apple-system, 'Microsoft YaHei', sans-serif">
+  <style>
+    .title { font-size: 16px; font-weight: bold; fill: #111; }
+    .h { font-size: 14px; font-weight: bold; fill: #111; }
+    .lbl { font-size: 12px; fill: #222; }
+    .small { font-size: 11px; fill: #555; }
+    .cpu { fill: #fef3c7; stroke: #f59e0b; }
+    .cache { fill: #dbeafe; stroke: #3b82f6; }
+    .mem { fill: #fee2e2; stroke: #dc2626; }
+    .wb { fill: #f0e7ff; stroke: #7c3aed; }
+    .arr { stroke: #16a34a; stroke-width: 2; fill: none; marker-end: url(#a1); }
+    .arr2 { stroke: #ef4444; stroke-width: 2; fill: none; marker-end: url(#a2); stroke-dasharray: 5 3; }
+    .arr3 { stroke: #7c3aed; stroke-width: 2; fill: none; marker-end: url(#a3); }
+  </style>
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#16a34a"/>
+    </marker>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#ef4444"/>
+    </marker>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#7c3aed"/>
+    </marker>
+  </defs>
+
+  <text x="400" y="26" text-anchor="middle" class="title">Cache 写策略两种现实搭配 · 流程对比</text>
+  <text x="400" y="46" text-anchor="middle" class="small">现实只用 ① 全写+非写分配(安全) ② 回写+写分配(性能);反向搭配几乎不考</text>
+
+  <!-- Layout: left = scheme 1, right = scheme 2 -->
+
+  <!-- Scheme 1: 全写 + 非写分配 -->
+  <text x="200" y="80" text-anchor="middle" class="h">搭配 ① · 全写法 + 非写分配法</text>
+  <text x="200" y="98" text-anchor="middle" class="small">(write-through + not-write-allocate · 安全优先)</text>
+
+  <!-- 命中 flow -->
+  <text x="40" y="125" class="lbl" font-weight="bold">📥 写命中:</text>
+  <rect x="40" y="135" width="60" height="36" class="cpu"/>
+  <text x="70" y="158" text-anchor="middle" class="lbl">CPU</text>
+  <rect x="140" y="135" width="60" height="36" class="cache"/>
+  <text x="170" y="158" text-anchor="middle" class="lbl">Cache</text>
+  <rect x="240" y="120" width="60" height="36" class="wb"/>
+  <text x="270" y="143" text-anchor="middle" class="lbl">写缓冲</text>
+  <rect x="240" y="160" width="60" height="36" class="mem"/>
+  <text x="270" y="183" text-anchor="middle" class="lbl">主存</text>
+
+  <path d="M 100 153 L 140 153" class="arr"/>
+  <path d="M 200 145 L 240 138" class="arr"/>
+  <path d="M 200 155 L 240 175" class="arr"/>
+  <path d="M 300 138 L 320 138 L 320 175 L 300 175" class="arr3"/>
+  <text x="328" y="160" class="small">异步</text>
+
+  <text x="40" y="220" class="small">✓ Cache 和主存同时更新</text>
+  <text x="40" y="236" class="small">✓ 写缓冲(write buffer): 小队列, CPU 不用等</text>
+  <text x="40" y="252" class="small">✗ 每次写都访主存(队列满了 CPU 还要等)</text>
+
+  <!-- 不命中 flow -->
+  <text x="40" y="295" class="lbl" font-weight="bold">📥 写不命中:</text>
+  <rect x="40" y="305" width="60" height="36" class="cpu"/>
+  <text x="70" y="328" text-anchor="middle" class="lbl">CPU</text>
+  <rect x="240" y="305" width="60" height="36" class="mem"/>
+  <text x="270" y="328" text-anchor="middle" class="lbl">主存</text>
+
+  <path d="M 100 323 L 240 323" class="arr"/>
+  <text x="170" y="318" text-anchor="middle" class="small">直接写主存</text>
+  <text x="170" y="358" text-anchor="middle" class="small" fill="#dc2626">⚠️ Cache 不调入</text>
+
+  <text x="40" y="395" class="small">✓ 不浪费 Cache 空间</text>
+  <text x="40" y="411" class="small">✗ 不利用空间局部性</text>
+
+  <!-- 必备 -->
+  <rect x="40" y="440" width="320" height="60" fill="#fff7ed" stroke="#fb923c" rx="4"/>
+  <text x="50" y="460" class="lbl">🔧 必备硬件: 写缓冲(write buffer)</text>
+  <text x="50" y="478" class="small">主存永远是真理 → 无须脏位</text>
+  <text x="50" y="494" class="small">典型场景: 早期 L1 / 强一致性要求场合</text>
+
+  <!-- Vertical divider -->
+  <line x1="400" y1="70" x2="400" y2="510" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- Scheme 2: 回写 + 写分配 -->
+  <text x="600" y="80" text-anchor="middle" class="h">搭配 ② · 回写法 + 写分配法</text>
+  <text x="600" y="98" text-anchor="middle" class="small">(write-back + write-allocate · 性能优先)</text>
+
+  <!-- 命中 flow -->
+  <text x="440" y="125" class="lbl" font-weight="bold">📥 写命中:</text>
+  <rect x="440" y="135" width="60" height="36" class="cpu"/>
+  <text x="470" y="158" text-anchor="middle" class="lbl">CPU</text>
+  <rect x="540" y="135" width="60" height="36" class="cache"/>
+  <text x="570" y="158" text-anchor="middle" class="lbl">Cache</text>
+  <rect x="540" y="180" width="60" height="20" fill="#fde68a" stroke="#f59e0b"/>
+  <text x="570" y="194" text-anchor="middle" class="small">脏位=1</text>
+  <rect x="660" y="135" width="60" height="36" class="mem"/>
+  <text x="690" y="158" text-anchor="middle" class="lbl">主存</text>
+
+  <path d="M 500 153 L 540 153" class="arr"/>
+  <line x1="600" y1="153" x2="660" y2="153" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="628" y="148" text-anchor="middle" class="small" fill="#94a3b8">不动!</text>
+
+  <text x="440" y="225" class="small">✓ 只写 Cache, 不动主存</text>
+  <text x="440" y="241" class="small">✓ 脏位标记"该块改过了"</text>
+
+  <text x="440" y="265" class="lbl" font-weight="bold">📤 块被替换时:</text>
+  <rect x="440" y="275" width="60" height="36" class="cache"/>
+  <text x="470" y="298" text-anchor="middle" class="lbl">Cache</text>
+  <rect x="560" y="275" width="60" height="36" class="mem"/>
+  <text x="590" y="298" text-anchor="middle" class="lbl">主存</text>
+  <path d="M 500 293 L 560 293" class="arr2"/>
+  <text x="530" y="288" text-anchor="middle" class="small">if 脏位=1</text>
+
+  <!-- 不命中 -->
+  <text x="440" y="345" class="lbl" font-weight="bold">📥 写不命中:</text>
+  <rect x="440" y="355" width="60" height="36" class="mem"/>
+  <text x="470" y="378" text-anchor="middle" class="lbl">主存</text>
+  <rect x="540" y="355" width="60" height="36" class="cache"/>
+  <text x="570" y="378" text-anchor="middle" class="lbl">Cache</text>
+  <rect x="640" y="355" width="60" height="36" class="cpu"/>
+  <text x="670" y="378" text-anchor="middle" class="lbl">CPU</text>
+
+  <path d="M 500 373 L 540 373" class="arr"/>
+  <text x="520" y="368" text-anchor="middle" class="small">调入</text>
+  <path d="M 640 373 L 600 373" class="arr"/>
+  <text x="620" y="368" text-anchor="middle" class="small">改</text>
+
+  <text x="440" y="415" class="small">✓ 调入块后再改, 利用空间局部性</text>
+  <text x="440" y="431" class="small">✗ 调入开销大</text>
+
+  <!-- 必备 -->
+  <rect x="440" y="440" width="320" height="60" fill="#fff7ed" stroke="#fb923c" rx="4"/>
+  <text x="450" y="460" class="lbl">🔧 必备硬件: 脏位(dirty bit, 1 bit/行)</text>
+  <text x="450" y="478" class="small">主存只在脏块被替换时才更新</text>
+  <text x="450" y="494" class="small">典型场景: 现代 CPU L1 d-cache 主流</text>
+</svg>

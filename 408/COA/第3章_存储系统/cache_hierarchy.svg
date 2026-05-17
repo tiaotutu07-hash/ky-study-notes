@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" font-family="-apple-system, 'Microsoft YaHei', sans-serif">
+  <style>
+    .lbl { font-size: 14px; fill: #222; }
+    .small { font-size: 12px; fill: #555; }
+    .title { font-size: 16px; font-weight: bold; fill: #111; }
+    .cache { fill: #e8f4fd; stroke: #1f6feb; stroke-width: 2; }
+    .set { fill: #fef6e4; stroke: #d97706; stroke-width: 1.5; }
+    .line { fill: #f0e7ff; stroke: #7c3aed; stroke-width: 1.5; }
+    .block { fill: #dcfce7; stroke: #16a34a; stroke-width: 1; }
+    .aux { fill: #fee2e2; stroke: #dc2626; stroke-width: 1; }
+  </style>
+
+  <text x="400" y="28" text-anchor="middle" class="title">Cache 层级嵌套结构 · (S, E, B, m)</text>
+  <text x="400" y="48" text-anchor="middle" class="small">Cache 由 S 个组组成;每组 E 行;每行 = 数据块(B字节) + 辅助位</text>
+
+  <!-- Cache outer -->
+  <rect x="40" y="70" width="720" height="380" rx="8" class="cache"/>
+  <text x="60" y="92" class="lbl">📦 Cache(总大小 C = S × E × B,只算数据)</text>
+
+  <!-- Sets -->
+  <rect x="60" y="110" width="320" height="320" rx="6" class="set"/>
+  <text x="78" y="132" class="lbl">📂 组 set 0(共 S = 2^s 个组)</text>
+
+  <rect x="400" y="110" width="100" height="320" rx="6" class="set"/>
+  <text x="412" y="132" class="lbl" font-size="12">组 1</text>
+
+  <rect x="510" y="110" width="100" height="320" rx="6" class="set"/>
+  <text x="522" y="132" class="lbl" font-size="12">…</text>
+
+  <rect x="620" y="110" width="120" height="320" rx="6" class="set"/>
+  <text x="635" y="132" class="lbl" font-size="12">组 S-1</text>
+
+  <!-- Lines inside set 0 -->
+  <rect x="80" y="150" width="280" height="80" rx="4" class="line"/>
+  <text x="92" y="170" class="lbl">📄 行 line 0(共 E 行/组)</text>
+
+  <!-- Line breakdown -->
+  <rect x="92" y="180" width="38" height="38" class="aux"/>
+  <text x="111" y="203" text-anchor="middle" font-size="11">V</text>
+  <text x="111" y="232" text-anchor="middle" class="small">有效</text>
+
+  <rect x="135" y="180" width="60" height="38" class="aux"/>
+  <text x="165" y="203" text-anchor="middle" font-size="11">Tag</text>
+  <text x="165" y="232" text-anchor="middle" class="small">t位</text>
+
+  <rect x="200" y="180" width="38" height="38" class="aux"/>
+  <text x="219" y="203" text-anchor="middle" font-size="11">D</text>
+  <text x="219" y="232" text-anchor="middle" class="small">脏位</text>
+
+  <rect x="243" y="180" width="38" height="38" class="aux"/>
+  <text x="262" y="203" text-anchor="middle" font-size="11">LRU</text>
+  <text x="262" y="232" text-anchor="middle" class="small">log₂E位</text>
+
+  <rect x="286" y="180" width="70" height="38" class="block"/>
+  <text x="321" y="203" text-anchor="middle" font-size="11">数据块</text>
+  <text x="321" y="232" text-anchor="middle" class="small">B 字节</text>
+
+  <rect x="80" y="240" width="280" height="50" rx="4" class="line"/>
+  <text x="92" y="270" class="lbl">📄 行 line 1</text>
+
+  <rect x="80" y="300" width="280" height="20" rx="4" class="line" opacity="0.5"/>
+  <text x="100" y="316" class="small">⋮</text>
+
+  <rect x="80" y="330" width="280" height="50" rx="4" class="line"/>
+  <text x="92" y="360" class="lbl">📄 行 line E-1</text>
+
+  <!-- Legend -->
+  <text x="80" y="408" class="small">📝 辅助位条件: V/Tag 永远在;D 仅回写法;LRU 位 仅 LRU 算法,位数 = log₂E</text>
+  <text x="80" y="424" class="small">📐 退化:E=1 → 直接映射;1&lt;E&lt;C/B → 组相联;E=C/B(S=1) → 全相联</text>
+</svg>
